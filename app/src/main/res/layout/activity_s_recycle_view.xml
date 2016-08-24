@@ -3,4 +3,11 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.isme.shen.slibrary.recycleView.SRecycleView
+        android:id="@+id/s_recycleview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.isme.shen.slibrary.recycleView.SRecycleView>
+
 </LinearLayout>

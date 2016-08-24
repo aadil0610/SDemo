@@ -18,7 +18,7 @@
         <activity
             android:name=".SplashActivity"
             android:theme="@style/translucentNoTitle" />
-        <activity android:name=".srecycleview.SRecycleViewV1"></activity>
+        <activity android:name=".srecycleview.SRecycleViewV1Activity"></activity>
         <activity android:name=".srecycleview.SRecycleViewActivity"></activity>
         <activity android:name=".ui.UiEntrance"></activity>
     </application>
