@@ -12,13 +12,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.isme.shen.sdemo.srecycleview.SRecycleViewActivity;
-import com.isme.shen.sdemo.ui.UiEntrance;
+import com.isme.shen.sdemo.ui.UiEntranceActivity;
 import com.isme.shen.slibrary.recycleView.SRecycleView;
 import com.isme.shen.slibrary.recycleView.SRecycleViewAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Class[] clazz = {SRecycleViewActivity.class, UiEntrance.class};
+    private Class[] clazz = {SRecycleViewActivity.class, UiEntranceActivity.class};
     private SRecycleView sRecycleView;
 
     @Override

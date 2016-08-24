@@ -85,7 +85,7 @@ public class SRecycleViewV1Activity extends AppCompatActivity {
             }
         });
 
-        sRecycleView.setOnSRecycleViewListener(new ISRecycleView.OnSRecycleViewListener() {
+        refreshView.setOnRefreshListening(new RefreshViewAbs.OnRefreshViewListening() {
             @Override
             public void refresh() {
                 new Thread(new Runnable() {
@@ -112,6 +112,7 @@ public class SRecycleViewV1Activity extends AppCompatActivity {
                 }).start();
             }
         });
+
         sRecycleView.setOnSRecycleViewScrollListening(new ISRecycleView.OnSRecycleViewScrollListening() {
             @Override
             public void onScrolled(int dx, int dy) {
@@ -125,53 +126,5 @@ public class SRecycleViewV1Activity extends AppCompatActivity {
                 L.d("refreshView","pullDown:"+dy);
             }
         });
-    }
-
-    private class DataAdapter extends RecyclerView.Adapter{
-
-        private Context context;
-        public DataAdapter(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(SRecycleViewV1Activity.this).inflate(R.layout.item_main, null);
-            MiHolder miHolder = new MiHolder(view);
-            return miHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-            MiHolder miHolder = (MiHolder) holder;
-            miHolder.tv.setText("position:"+position);
-
-            miHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(SRecycleViewV1Activity.this,"position:"+position,Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return data == null?0:data.size();
-        }
-
-        private List data;
-        public void setData(List data) {
-            this.data = data;
-        }
-
-        private class MiHolder extends RecyclerView.ViewHolder{
-
-            TextView tv;
-            public MiHolder(View view) {
-                super(view);
-
-                tv = (TextView) view.findViewById(R.id.tv_name);
-            }
-        }
     }
 }

@@ -22,12 +22,7 @@ public class SRecycleView extends RecyclerView {
     private LoadMoreViewAbs loadMoreView;
     private SRecycleViewAdapter sRecycleViewAdapter;
 
-    private ISRecycleView.OnSRecycleViewListener onSRecycleViewListener;
     private ISRecycleView.OnSRecycleViewScrollListening onSRecycleViewScrollListening;
-
-    public void setOnSRecycleViewListener(ISRecycleView.OnSRecycleViewListener onSRecycleViewListener) {
-        this.onSRecycleViewListener = onSRecycleViewListener;
-    }
 
     public void setOnSRecycleViewScrollListening(ISRecycleView.OnSRecycleViewScrollListening onSRecycleViewScrollListening) {
         this.onSRecycleViewScrollListening = onSRecycleViewScrollListening;
@@ -94,9 +89,8 @@ public class SRecycleView extends RecyclerView {
                 if(isOnTop() && refreshView!= null){
                     refreshView.mationActionUp(e.getRawY());
                     if (refreshView.getCurrentState() == RefreshViewAbs.RefreshViewState.IS_REFRESHING) {
-                        if (onSRecycleViewListener != null && SRecycleView.this.getRecycleViewState() != IS_REFRESHING) {
+                        if (SRecycleView.this.getRecycleViewState() != IS_REFRESHING) {
                             setRecycleViewState(IS_REFRESHING);
-                            onSRecycleViewListener.refresh();
                             if(loadMoreView != null)loadMoreView.loadMoreComplete(true);
                         }
                     }

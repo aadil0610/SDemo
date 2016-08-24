@@ -21,7 +21,7 @@ import com.isme.shen.slibrary.recycleView.SRecycleViewAdapter;
  */
 public class SRecycleViewActivity extends AppCompatActivity {
 
-    private Class[] clazz = {SRecycleViewV1Activity.class};
+    private Class[] clazz = {SRecycleViewV1Activity.class,SRecycleViewV2GearActivity.class};
     private SRecycleView sRecycleView;
 
     @Override

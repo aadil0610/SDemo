@@ -38,6 +38,11 @@ public class RefreshView extends RefreshViewAbs {
     }
 
     @Override
+    protected void scrolled(float dy) {
+
+    }
+
+    @Override
     public void refresh() {
         tv.setText("正在刷新....");
     }

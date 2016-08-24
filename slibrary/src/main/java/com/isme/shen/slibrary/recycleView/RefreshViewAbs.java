@@ -34,6 +34,14 @@ public abstract class RefreshViewAbs extends LinearLayout {
         void scrolled(float dy);
     }
 
+    private OnRefreshViewListening onRefreshViewListening;
+    public interface OnRefreshViewListening{
+        void refresh();
+    }
+
+    public void setOnRefreshListening( OnRefreshViewListening onRefreshViewListening){
+        this.onRefreshViewListening = onRefreshViewListening;
+    }
     public void setOnRefreshViewPullDownListening( OnRefreshViewPullDownListening onRefreshViewPullDownListening){
         this.onRefreshViewPullDownListening = onRefreshViewPullDownListening;
     }
@@ -42,6 +50,7 @@ public abstract class RefreshViewAbs extends LinearLayout {
         if (getCurrentState() == RefreshViewAbs.RefreshViewState.RELEASE_TO_REFRESH) {
             setState(RefreshViewAbs.RefreshViewState.IS_REFRESHING);
             smoothScrollTo(getMeasureHeight());
+            if(onRefreshViewListening != null) onRefreshViewListening.refresh();
             refresh();
         }
         if (getCurrentState() == RefreshViewAbs.RefreshViewState.NO_STATE) {
@@ -125,11 +134,12 @@ public abstract class RefreshViewAbs extends LinearLayout {
         setRefreshViewHeight((int) (countPullDown));
         if(onRefreshViewPullDownListening != null){
             onRefreshViewPullDownListening.scrolled(dy);
+            scrolled(dy);
         }
         if(currentState == RefreshViewState.IS_REFRESHING){
             return;
         }
-       if(countPullDown >= measureHeight){
+       if(countPullDown >= measureHeight - 20){
             setState(RefreshViewState.RELEASE_TO_REFRESH);
             releaseToRefresh();
         } else if(countPullDown >=0){
@@ -138,6 +148,8 @@ public abstract class RefreshViewAbs extends LinearLayout {
         }
 
     }
+
+    protected abstract void scrolled(float dy);
 
     /**
      * 设置view 的高度
