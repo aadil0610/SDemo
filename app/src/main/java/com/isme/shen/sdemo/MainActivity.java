@@ -1,33 +1,25 @@
 package com.isme.shen.sdemo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.isme.shen.slibrary.recycleView.ISRecycleView;
-import com.isme.shen.slibrary.recycleView.LoadMoreView;
-import com.isme.shen.slibrary.recycleView.LoadMoreViewAbs;
-import com.isme.shen.slibrary.recycleView.RefreshView;
-import com.isme.shen.slibrary.recycleView.RefreshViewAbs;
+import com.isme.shen.sdemo.srecycleview.SRecycleViewActivity;
+import com.isme.shen.sdemo.ui.UiEntrance;
 import com.isme.shen.slibrary.recycleView.SRecycleView;
 import com.isme.shen.slibrary.recycleView.SRecycleViewAdapter;
-import com.isme.shen.slibrary.utils.L;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Class[] clazz = {SRecycleViewActivity.class, UiEntrance.class};
     private SRecycleView sRecycleView;
-    private List list;
-    private LoadMoreViewAbs loadMoreView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,87 +35,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void initData() {
 
-        list = new ArrayList();
-        for(int i = 0;i<20;i++){
-            list.add("");
-        }
+//        MainActivity.this.startActivity(new Intent(MainActivity.this,SplashActivity.class));
+//        overridePendingTransition(R.anim.anim_activity_fade_in,-1);
 
         DataAdapter dataAdapter = new DataAdapter(this);
-        dataAdapter.setData(list);
+        dataAdapter.setData(clazz);
         sRecycleView.setLayoutManager(new LinearLayoutManager(this));
         final SRecycleViewAdapter adapter = new SRecycleViewAdapter(this,dataAdapter);
-        RefreshView refreshView = new RefreshView(this);
-        adapter.setHeaderView(refreshView);
-        loadMoreView = new LoadMoreView(this);
-        adapter.setLoadMoreView(loadMoreView);
-
         sRecycleView.setAdapter(adapter);
-
-        loadMoreView.setOnLoadMoreListener(new LoadMoreViewAbs.OnLoadMoreListener() {
-            @Override
-            public void onLoadMoreClick() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        for(int i = 0;i<20;i++){
-                            list.add("");
-                        }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                adapter.notifyDataSetChanged();
-                                if(list.size() >= 100){
-                                    loadMoreView.loadMoreComplete(false);
-                                } else {
-                                    loadMoreView.loadMoreComplete(true);
-                                }
-                            }
-                        });
-                    }
-                },2000);
-            }
-        });
-
-        sRecycleView.setOnSRecycleViewListener(new ISRecycleView.OnSRecycleViewListener() {
-            @Override
-            public void refresh() {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(3000);
-                            list.clear();
-                            for(int i = 0;i<20;i++){
-                                list.add("");
-                            }
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-
-                        MainActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                sRecycleView.refreshComplete();
-                                L.d("main","sRecycleView.refreshComplete();");
-                            }
-                        });
-                    }
-                }).start();
-            }
-        });
-        sRecycleView.setOnSRecycleViewScrollListening(new ISRecycleView.OnSRecycleViewScrollListening() {
-            @Override
-            public void onScrolled(int dx, int dy) {
-                L.d("scroll","dx:"+dx+";dy:"+dy);
-            }
-        });
-
-       refreshView.setOnRefreshViewPullDownListening(new RefreshViewAbs.OnRefreshViewPullDownListening() {
-            @Override
-            public void scrolled(float dy) {
-                L.d("refreshView","pullDown:"+dy);
-            }
-        });
     }
 
     private class DataAdapter extends RecyclerView.Adapter{
@@ -135,42 +54,44 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            TextView tv = new TextView(context);
-            tv.setPadding(0,30,0,30);
-            MiHolder miHolder = new MiHolder(tv);
+            View view = LayoutInflater.from(context).inflate(R.layout.item_main, null);
+            MiHolder miHolder = new MiHolder(view);
             return miHolder;
         }
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
             MiHolder miHolder = (MiHolder) holder;
-            TextView tv = (TextView) miHolder.itemView;
-            tv.setText("position:"+position);
-            tv.setTextSize(30);
+            miHolder.tv.setText(data[position].getSimpleName());
 
-            tv.setOnClickListener(new View.OnClickListener() {
+            miHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(MainActivity.this,"position:"+position,Toast.LENGTH_SHORT).show();
+                    MainActivity.this.startActivity(new Intent(MainActivity.this,data[position]));
                 }
             });
         }
 
         @Override
         public int getItemCount() {
-            return data == null?0:data.size();
+            return data == null?0:data.length;
         }
 
-        private List data;
-        public void setData(List data) {
+        private Class[] data;
+        public void setData(Class[] data) {
             this.data = data;
         }
 
         private class MiHolder extends RecyclerView.ViewHolder{
 
             TextView tv;
-            public MiHolder(View tv) {
-                super(tv);
+            public MiHolder(View view) {
+                super(view);
+                init(view);
+            }
+
+            private void init(View view) {
+                tv = (TextView) view.findViewById(R.id.tv_name);
             }
         }
     }

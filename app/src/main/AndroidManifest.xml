@@ -8,15 +8,19 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".SplashActivity"
-            android:theme="@style/translucent">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"></activity>
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/translucentNoTitle" />
+        <activity android:name=".srecycleview.SRecycleViewV1"></activity>
+        <activity android:name=".srecycleview.SRecycleViewActivity"></activity>
+        <activity android:name=".ui.UiEntrance"></activity>
     </application>
 
 </manifest>
