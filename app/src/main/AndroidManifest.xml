@@ -21,7 +21,10 @@
         <activity android:name=".srecycleview.SRecycleViewV1Activity" />
         <activity android:name=".srecycleview.SRecycleViewActivity" />
         <activity android:name=".ui.UiEntranceActivity" />
-        <activity android:name=".srecycleview.SRecycleViewV2GearActivity"></activity>
+        <activity android:name=".srecycleview.SRecycleViewV2GearActivity" />
+        <activity android:name=".visual.ViscidityWidgetActivity" />
+        <activity android:name=".visual.VisualActivity" />
+        <activity android:name=".visual.LoadingActivity"></activity>
     </application>
 
 </manifest>
