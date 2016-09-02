@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.isme.shen.slibrary.utils.L;
+import com.isme.shen.slibrary.utils.LogUtils;
 
 /**
  * Created by shen on 2016/8/19.
@@ -90,7 +90,7 @@ public abstract class LoadMoreViewAbs extends LinearLayout{
     }
 
     public int getMeasureHeight(){
-        L.d("measureHeight","measureHeight:"+measureHeight);
+        LogUtils.d("measureHeight","measureHeight:"+measureHeight);
         return measureHeight;
     }
 
@@ -100,7 +100,7 @@ public abstract class LoadMoreViewAbs extends LinearLayout{
     public void putDown(float dy){
         float countPullDown = getVisibleHeight() - dy/2;
 
-        L.d("refresh_view","countPullDown:"+countPullDown+"dy:"+dy+"measureHeight:"+measureHeight+"EMPTY_HEIGHT:"+EMPTY_HEIGHT);
+        LogUtils.d("refresh_view","countPullDown:"+countPullDown+"dy:"+dy+"measureHeight:"+measureHeight+"EMPTY_HEIGHT:"+EMPTY_HEIGHT);
         if(countPullDown < getMeasureHeight()){
             setRefreshViewHeight(getMeasureHeight());
             return;

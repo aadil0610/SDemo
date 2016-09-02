@@ -5,9 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.Adapter;
-
-import com.isme.shen.slibrary.utils.L;
 
 /**
  * Created by shen on 2016/8/19.

@@ -4,5 +4,10 @@
     android:layout_height="match_parent"
     android:id="@+id/ll"
     >
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorGear1"></View>
 
 </LinearLayout>
