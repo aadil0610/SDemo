@@ -10,4 +10,7 @@
     <color name="colorGear3">#3A68C3</color>
     <color name="colorGear4">#4E78D7</color>
     <color name="colorGear5">#3A68C3</color>
+
+    <!--透明-->
+    <color name="transparent">#00000000</color>
 </resources>
