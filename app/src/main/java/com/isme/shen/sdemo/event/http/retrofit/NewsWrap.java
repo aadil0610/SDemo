@@ -1,10 +1,8 @@
-package com.isme.shen.sdemo.event.http;
+package com.isme.shen.sdemo.event.http.retrofit;
 
 import android.app.Activity;
 
-import com.isme.shen.slibrary.http.Response;
 import com.isme.shen.slibrary.http.RetrofitUtils;
-import com.isme.shen.slibrary.http.ServiceResponseFun;
 import com.isme.shen.slibrary.utils.LogUtils;
 
 import rx.Observable;

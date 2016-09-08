@@ -1,7 +1,6 @@
-package com.isme.shen.sdemo.event.http;
+package com.isme.shen.sdemo.event.http.retrofit;
 
 import com.isme.shen.sdemo.Const;
-import com.isme.shen.slibrary.http.Response;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;

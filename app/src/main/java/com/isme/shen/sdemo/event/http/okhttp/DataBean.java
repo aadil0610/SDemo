@@ -1,4 +1,4 @@
-package com.isme.shen.sdemo.event;
+package com.isme.shen.sdemo.event.http.okhttp;
 
 /**
  * Created by shen on 2016/8/31.

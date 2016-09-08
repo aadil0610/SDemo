@@ -1,5 +1,7 @@
-package com.isme.shen.sdemo.event;
+package com.isme.shen.sdemo.event.http.okhttp;
 
+
+import com.isme.shen.sdemo.event.http.okhttp.DataBean;
 
 import java.util.List;
 

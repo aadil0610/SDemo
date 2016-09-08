@@ -1,7 +1,7 @@
 package com.isme.shen.slibrary.http;
 
 /**
- * 接口返回数据解析异常类
+ * 自定义异常类
  * Created by shen on 2016/9/6.
  */
 public class ApiException extends RuntimeException {

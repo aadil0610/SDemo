@@ -4,6 +4,8 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
+import android.widget.Button;
 
 import com.isme.shen.sdemo.R;
 import com.isme.shen.slibrary.recycleView.ISRecycleView;
@@ -23,6 +25,7 @@ public class SRecycleViewV1Activity extends AppCompatActivity {
     private SRecycleView sRecycleView;
     private List list;
     private LoadMoreViewAbs loadMoreView;
+    private Button btnLoad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,15 +37,16 @@ public class SRecycleViewV1Activity extends AppCompatActivity {
 
     private void initView() {
         sRecycleView = (SRecycleView) findViewById(R.id.s_recycleview);
+        btnLoad = (Button) findViewById(R.id.btn_load);
     }
 
     private void initData() {
         list = new ArrayList();
-        for(int i = 0;i<20;i++){
+        for(int i = 0;i<10;i++){
             list.add("");
         }
 
-        DataAdapter dataAdapter = new DataAdapter(this);
+        final DataAdapter dataAdapter = new DataAdapter(this);
         dataAdapter.setData(list);
         sRecycleView.setLayoutManager(new LinearLayoutManager(this));
         final SRecycleViewAdapter adapter = new SRecycleViewAdapter(this,dataAdapter);
@@ -53,19 +57,41 @@ public class SRecycleViewV1Activity extends AppCompatActivity {
 
         sRecycleView.setAdapter(adapter);
 
+        btnLoad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for(int i = 0;i<10;i++){
+                    list.add("");
+                }
+                dataAdapter.notifyDataSetChanged();
+            }
+        });
+
+        adapter.setOnDataChangeListener(new SRecycleViewAdapter.OnDataChangeListener() {
+            @Override
+            public void noData() {
+                btnLoad.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void uData() {
+                btnLoad.setVisibility(View.GONE);
+            }
+        });
+
         loadMoreView.setOnLoadMoreListener(new LoadMoreViewAbs.OnLoadMoreListener() {
             @Override
             public void onLoadMoreClick() {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        for(int i = 0;i<20;i++){
+                        for(int i = 0;i<5;i++){
                             list.add("");
                         }
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                adapter.notifyDataSetChanged();
+                                dataAdapter.notifyDataSetChanged();
                                 if(list.size() >= 100){
                                     loadMoreView.loadMoreComplete(false);
                                 } else {
@@ -87,9 +113,9 @@ public class SRecycleViewV1Activity extends AppCompatActivity {
                         try {
                             Thread.sleep(3000);
                             list.clear();
-                            for(int i = 0;i<20;i++){
+                           /* for(int i = 0;i<10;i++){
                                 list.add("");
-                            }
+                            }*/
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -97,6 +123,7 @@ public class SRecycleViewV1Activity extends AppCompatActivity {
                         SRecycleViewV1Activity.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                dataAdapter.notifyDataSetChanged();
                                 sRecycleView.refreshComplete();
                                 LogUtils.d("main","sRecycleView.refreshComplete();");
                             }
@@ -119,5 +146,7 @@ public class SRecycleViewV1Activity extends AppCompatActivity {
                 LogUtils.d("refreshView","pullDown:"+dy);
             }
         });
+
+        dataAdapter.notifyDataSetChanged();
     }
 }

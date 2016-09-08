@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.os.Looper;
 
 import com.isme.shen.sdemo.BaseButtonListActivity;
-import com.isme.shen.sdemo.event.http.NewsDataBean;
-import com.isme.shen.sdemo.event.http.NewsWrap;
+import com.isme.shen.sdemo.event.http.okhttp.DataBean;
+import com.isme.shen.sdemo.event.http.okhttp.InternetServerImpl;
+import com.isme.shen.sdemo.event.http.retrofit.NewsDataBean;
+import com.isme.shen.sdemo.event.http.retrofit.NewsWrap;
 import com.isme.shen.slibrary.http.ApiException;
 import com.isme.shen.slibrary.http.ServiceSubscribe;
 import com.isme.shen.slibrary.utils.LogUtils;

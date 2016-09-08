@@ -1,5 +1,7 @@
-package com.isme.shen.slibrary.http;
+package com.isme.shen.sdemo.event.http.retrofit;
 
+
+import com.isme.shen.slibrary.http.ApiException;
 
 import rx.functions.Func1;
 

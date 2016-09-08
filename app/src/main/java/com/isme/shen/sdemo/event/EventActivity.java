@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.isme.shen.sdemo.R;
 import com.isme.shen.sdemo.srecycleview.SRecycleViewActivity;
 import com.isme.shen.sdemo.ui.UiEntranceActivity;
@@ -23,7 +24,7 @@ import com.isme.shen.slibrary.recycleView.SRecycleViewAdapter;
  * Created by shen on 2016/8/30.
  */
 public class EventActivity extends AppCompatActivity{
-    private Class[] clazz = {RxJavaRxAndroidActivity.class,RetrofitActivity.class,OkHttpActivity.class};
+    private Class[] clazz = {RxJavaRxAndroidActivity.class,RetrofitActivity.class,OkHttpActivity.class, FrescoActivity.class};
     private SRecycleView sRecycleView;
 
     @Override

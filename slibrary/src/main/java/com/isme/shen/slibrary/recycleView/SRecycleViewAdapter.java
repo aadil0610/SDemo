@@ -1,6 +1,7 @@
 package com.isme.shen.slibrary.recycleView;
 
 import android.content.Context;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +14,37 @@ public class SRecycleViewAdapter extends RecyclerView.Adapter {
     private static final int TYPE_HEADER_REFRESH = 1;
     private static final int TYPE_NORMAL = 2;
     private static final int TYPE_LOAD_MORE = 3;
+
     private Context context;
     private RefreshViewAbs refreshView;
     private LoadMoreViewAbs loadMoreView;
 
     private RecyclerView.Adapter innerAdapter;
+
+    //是否能够刷新的总开关
+    private boolean refreshEnabled = true;
+    //是否能够上拉加载 的总开关
+    private boolean loadMoreEnabled = true;
+
     public SRecycleViewAdapter(Context context, RecyclerView.Adapter innerAdapter) {
         this.context = context;
         setAdapter(innerAdapter);
+    }
+
+    public boolean isLoadMoreEnabled() {
+        return loadMoreEnabled;
+    }
+
+    public void setLoadMoreEnabled(boolean loadMoreEnabled) {
+        this.loadMoreEnabled = loadMoreEnabled;
+    }
+
+    public boolean isRefreshEnabled() {
+        return refreshEnabled;
+    }
+
+    public void setRefreshEnabled(boolean refreshEnabled) {
+        this.refreshEnabled = refreshEnabled;
     }
 
     public LoadMoreViewAbs getLoadMoreView() {
@@ -41,9 +65,9 @@ public class SRecycleViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        if(position == 0){
+        if(position == 0 && isRefreshEnabled()){
             return TYPE_HEADER_REFRESH;
-        }else if(position ==getItemCount() -1){
+        }else if(position ==getItemCount() -1 && isLoadMoreEnabled()){
             return TYPE_LOAD_MORE;
         } else{
             return innerAdapter.getItemViewType(position+1);
@@ -76,12 +100,30 @@ public class SRecycleViewAdapter extends RecyclerView.Adapter {
     }
 
     @Override
+    public void onAttachedToRecyclerView(final RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+        if (manager instanceof GridLayoutManager) {
+            final GridLayoutManager gridManager = ((GridLayoutManager) manager);
+            gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+
+                    return ((position == 0 && refreshView != null) || (position == getItemCount() -1 && loadMoreView != null))
+                            ? gridManager.getSpanCount() : 1;
+                }
+            });
+        }
+        innerAdapter.onAttachedToRecyclerView(recyclerView);
+    }
+
+    @Override
     public int getItemCount() {
         int count = innerAdapter.getItemCount();
-        if(refreshView != null){
+        if(refreshView != null && isRefreshEnabled()){
             count ++;
         }
-        if(loadMoreView != null){
+        if(loadMoreView != null && isLoadMoreEnabled()){
             count ++;
         }
         return count;
@@ -112,10 +154,23 @@ public class SRecycleViewAdapter extends RecyclerView.Adapter {
         return 0;
     }
 
+    /**
+     * 监听数据的变化，响应数据size
+     * */
     class HeaderHolder extends RecyclerView.ViewHolder {
         public HeaderHolder(View itemView) {
             super(itemView);
         }
+    }
+
+    private  OnDataChangeListener onDataChangeListener;
+    public interface OnDataChangeListener{
+        void noData();
+        void uData();
+    }
+
+    public void setOnDataChangeListener(OnDataChangeListener onDataChangeListener){
+        this.onDataChangeListener = onDataChangeListener;
     }
 
     /**
@@ -127,21 +182,25 @@ public class SRecycleViewAdapter extends RecyclerView.Adapter {
         public void onChanged() {
             super.onChanged();
             notifyDataSetChanged();
+            checkData();
         }
 
         @Override
         public void onItemRangeChanged(int positionStart, int itemCount) {
             notifyItemRangeChanged(positionStart +  getFristNormalItem(), itemCount);
+            checkData();
         }
 
         @Override
         public void onItemRangeInserted(int positionStart, int itemCount) {
             notifyItemRangeInserted(positionStart +getFristNormalItem(), itemCount);
+            checkData();
         }
 
         @Override
         public void onItemRangeRemoved(int positionStart, int itemCount) {
             notifyItemRangeRemoved(positionStart +  getFristNormalItem(), itemCount);
+            checkData();
         }
 
         @Override
@@ -149,6 +208,21 @@ public class SRecycleViewAdapter extends RecyclerView.Adapter {
             notifyItemRangeChanged(fromPosition +  getFristNormalItem(), toPosition + getFristNormalItem()+ itemCount);
         }
     };
+
+    private void checkData() {
+//        int count = getItemCount() - getFristNormalItem() - (loadMoreView == null ? 0 : 1);
+        if(onDataChangeListener != null){
+            if(innerAdapter.getItemCount() == 0){
+                setLoadMoreEnabled(false);
+                setRefreshEnabled(false);
+                onDataChangeListener.noData();
+            } else {
+                setLoadMoreEnabled(true);
+                setRefreshEnabled(true);
+                onDataChangeListener.uData();
+            }
+        }
+    }
 
 }
 

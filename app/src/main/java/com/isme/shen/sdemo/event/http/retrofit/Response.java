@@ -1,7 +1,7 @@
-package com.isme.shen.slibrary.http;
+package com.isme.shen.sdemo.event.http.retrofit;
 
 /**
- * 统一解析类
+ * 统一解析泛型类
  * Created by shen on 2016/9/2.
  */
 public class Response<T> {

@@ -47,14 +47,14 @@ public abstract class RetrofitManagerAbs {
     /**
      * 临时更换链接,用完调用reset方法
     * */
-    protected void changedUrlTemp(String url){
+    public void changedUrlTemp(String url){
         init(url);
     }
 
     /**
      * 恢复为第一次传入的url
      * */
-    protected void reset(){
+    public void reset(){
         if(url != null&&!"".equals(url)){
             init(url);
         }

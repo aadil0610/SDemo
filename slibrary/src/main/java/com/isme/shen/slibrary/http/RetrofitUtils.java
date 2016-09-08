@@ -22,37 +22,35 @@ import rx.schedulers.Schedulers;
 public class RetrofitUtils {
 
     protected Activity activity;
-    protected RetrofitUtils(Activity activity){
+
+    protected RetrofitUtils(Activity activity) {
         this.activity = activity;
     }
 
     private Observable.Transformer transformer;
+
     /**
      * @param <T>
      * @return
      */
     protected <T> Observable.Transformer<T, T> applySchedulers() {
-        if(transformer == null){
-            transformer = new Observable.Transformer<T, T>() {
-                @Override
-                public Observable<T> call(Observable<T> tObservable) {
-                    return tObservable.observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.io())
-                            .doOnSubscribe(new Action0() {
-                                @Override
-                                public void call() {
-                                    DialogUtils.getInstance().showProgressDialog(activity);
-                                    LogUtils.d("retrofit",Looper.myLooper().getThread().getName()+":"+NetUtils.isConnected(activity.getApplicationContext()));
-                                    if(!NetUtils.isConnected(activity.getApplicationContext()) && !NetUtils.isWifi(activity.getApplicationContext())){
-                                        ApiException apiException = new ApiException(ApiException.NET_DISCONNECT,"网络未连接");
-                                        throw apiException;
-                                    }
+        return new Observable.Transformer<T, T>() {
+            @Override
+            public Observable<T> call(Observable<T> tObservable) {
+                return tObservable.observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .doOnSubscribe(new Action0() {
+                            @Override
+                            public void call() {
+                                DialogUtils.getInstance().showProgressDialog(activity);
+                                LogUtils.d("retrofit", Looper.myLooper().getThread().getName() + ":" + NetUtils.isConnected(activity.getApplicationContext()));
+                                if (!NetUtils.isConnected(activity.getApplicationContext()) && !NetUtils.isWifi(activity.getApplicationContext())) {
+                                    ApiException apiException = new ApiException(ApiException.NET_DISCONNECT, "网络未连接");
+                                    throw apiException;
                                 }
-                            }).subscribeOn(AndroidSchedulers.mainThread());
-                }
-            };
-        }
-        LogUtils.d("retrofit","applySchedulers...");
-        return transformer;
+                            }
+                        }).subscribeOn(AndroidSchedulers.mainThread());
+            }
+        };
     }
 }

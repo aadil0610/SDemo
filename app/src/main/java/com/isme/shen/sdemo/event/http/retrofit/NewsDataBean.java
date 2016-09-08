@@ -1,6 +1,4 @@
-package com.isme.shen.sdemo.event.http;
-
-import com.isme.shen.slibrary.http.Response;
+package com.isme.shen.sdemo.event.http.retrofit;
 
 import java.util.List;
 

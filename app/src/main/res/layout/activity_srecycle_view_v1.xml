@@ -14,4 +14,14 @@
 
     </com.isme.shen.slibrary.recycleView.SRecycleView>
 
+    <Button
+        android:id="@+id/btn_load"
+        android:textSize="22sp"
+        android:layout_centerInParent="true"
+        android:textColor="@color/black"
+        android:text="目前没有数据，点击重试"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>
