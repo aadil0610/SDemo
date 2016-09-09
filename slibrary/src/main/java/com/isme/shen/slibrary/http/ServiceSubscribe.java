@@ -44,13 +44,13 @@ public abstract class ServiceSubscribe<T> extends Subscriber<T>{
 
     @Override
     public void onCompleted() {
-        DialogUtils.getInstance().dismissProgressDialog(activity);
+        DialogUtils.getInstance().dismissProgressDialog();
         LogUtils.d("retrofit","onCompleted");
     }
 
     @Override
     public void onError(Throwable e) {
-        DialogUtils.getInstance().dismissProgressDialog(activity);
+        DialogUtils.getInstance().dismissProgressDialog();
         LogUtils.d("retrofit","onError:"+e.getMessage()+":"+Looper.myLooper().getThread().getName());
         handleException(e);
     }
@@ -68,12 +68,11 @@ public abstract class ServiceSubscribe<T> extends Subscriber<T>{
 
         ApiException ex;
         if(e instanceof SocketTimeoutException){
-            ex = new ApiException(e, ApiException.CONNECTION_OUT);
-            ex.setDisplayMessage(activity.getString(R.string.net_conn_out));
-            onNetError(ex);
+            ex = new ApiException(ApiException.CONNECTION_OUT,e.getMessage(),activity.getString(R.string.net_conn_out));
+            handApiException(ex);
         }else if (e instanceof HttpException){             //HTTP错误
             HttpException httpException = (HttpException) e;
-            ex = new ApiException(e, httpException.code());
+            ex = new ApiException(httpException.code(),e.getMessage(),activity.getString(R.string.net_error));
             switch(httpException.code()){
                 case UNAUTHORIZED:
                 case FORBIDDEN:
@@ -88,25 +87,50 @@ public abstract class ServiceSubscribe<T> extends Subscriber<T>{
                 case SERVICE_UNAVAILABLE:
                 default:
                     ex.setDisplayMessage(activity.getString(R.string.net_error));  //均视为网络错误
-                    onNetError(ex);
+                    handApiException(ex);
                     break;
             }
         }  else if (e instanceof JsonParseException
                 || e instanceof JSONException
                 || e instanceof ParseException){
-            ex = new ApiException(e, ApiException.PARSE_ERROR);
-            ex.setDisplayMessage(activity.getString(R.string.data_parse_error));            //均视为解析错误
-            onJsonError(ex);
-        } else {
-            ex = new ApiException(e, ApiException.UNKNOWN);
-            ex.setDisplayMessage(activity.getString(R.string.unknow_error));          //未知错误
-            onUnKnowError(ex);
+            ex = new ApiException(ApiException.PARSE_ERROR,e.getMessage(),activity.getString(R.string.data_parse_error));
+            handApiException(ex);
+        } else if(e instanceof ApiException){
+            handApiException((ApiException) e);
+        }
+        else {
+            ex = new ApiException(ApiException.UNKNOWN,e.getMessage(),activity.getString(R.string.unknow_error));
+            handApiException(ex);
+        }
+    }
+
+    private void handApiException(ApiException e) {
+        switch (((ApiException) e).getCode()){
+            case ApiException.NET_DISCONNECT :
+                onNetError((ApiException) e);
+                break;
+            case ApiException.CONNECTION_OUT:
+                onNetError(e);
+                break;
+            case ApiException.PARSE_ERROR:
+                onJsonError(e);
+                break;
+            case ApiException.UNKNOWN:
+                onUnKnowError(e);
+                break;
+            case ApiException.DATA_STYLE_ERROR:
+                onJsonError(e);
+                break;
+
+            default:
+                onUnKnowError(e);
+                break;
         }
     }
 
     /*未知错误*/
     protected void onUnKnowError(ApiException ex) {
-        LogUtils.d("retrofit","onUnKnowError："+ex.getDisplayMessage());
+        LogUtils.d("retrofit","onUnKnowError："+ex.getMessage());
         ToastUtils.showShort(activity,ex.getDisplayMessage());
     }
     /*解析错误*/

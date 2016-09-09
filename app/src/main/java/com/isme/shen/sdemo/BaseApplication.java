@@ -3,11 +3,12 @@ package com.isme.shen.sdemo;
 import android.app.Application;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.isme.shen.slibrary.SBaseApplication;
 
 /**
  * Created by shen on 2016/9/8.
  */
-public class BaseApplication extends Application {
+public class BaseApplication extends SBaseApplication {
 
     @Override
     public void onCreate() {

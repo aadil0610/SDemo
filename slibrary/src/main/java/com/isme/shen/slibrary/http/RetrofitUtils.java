@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Looper;
 
+import com.isme.shen.slibrary.R;
+import com.isme.shen.slibrary.SBaseApplication;
 import com.isme.shen.slibrary.utils.DialogUtils;
 import com.isme.shen.slibrary.utils.LogUtils;
 import com.isme.shen.slibrary.utils.NetUtils;
@@ -44,9 +46,8 @@ public class RetrofitUtils {
                             public void call() {
                                 DialogUtils.getInstance().showProgressDialog(activity);
                                 LogUtils.d("retrofit", Looper.myLooper().getThread().getName() + ":" + NetUtils.isConnected(activity.getApplicationContext()));
-                                if (!NetUtils.isConnected(activity.getApplicationContext()) && !NetUtils.isWifi(activity.getApplicationContext())) {
-                                    ApiException apiException = new ApiException(ApiException.NET_DISCONNECT, "网络未连接");
-                                    throw apiException;
+                                if (!NetUtils.isConnected(SBaseApplication.getAppContext()) && !NetUtils.isWifi(SBaseApplication.getAppContext())) {
+                                    throw new ApiException(ApiException.NET_DISCONNECT,SBaseApplication.getAppContext().getString(R.string.net_disconnect),SBaseApplication.getAppContext().getString(R.string.net_disconnect));
                                 }
                             }
                         }).subscribeOn(AndroidSchedulers.mainThread());

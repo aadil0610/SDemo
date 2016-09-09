@@ -16,7 +16,6 @@ import rx.functions.Func1;
  */
 public class PictureWrap extends RetrofitUtils{
 
-
     public PictureWrap(Activity activity) {
         super(activity);
     }

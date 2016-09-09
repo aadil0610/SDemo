@@ -16,7 +16,7 @@ public class ServiceResponseFun<T> implements Func1<Response<T>, List<T>> {
     @Override
     public List<T> call(Response<T> tResponse) {
         if(200 != tResponse.code){
-            throw new ApiException("not current response code :"+tResponse.code);
+            throw new ApiException(ApiException.DATA_STYLE_ERROR,"not current response code :"+tResponse.code,"not current response code :"+tResponse.code);
         }
         return tResponse.getNewslist();
     }

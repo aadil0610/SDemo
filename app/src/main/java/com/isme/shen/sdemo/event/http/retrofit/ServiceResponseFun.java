@@ -14,7 +14,7 @@ public class ServiceResponseFun<T> implements Func1<Response<T>, T> {
     @Override
     public T call(Response<T> tResponse) {
         if (!"成功的返回".equals(tResponse.getReason())) {
-            throw new ApiException(tResponse.getReason());
+            throw new ApiException(ApiException.DATA_STYLE_ERROR,tResponse.getReason(),tResponse.getReason());
         }
         T t = tResponse.getResult();
         return tResponse.getResult();

@@ -10,34 +10,40 @@ public class ApiException extends RuntimeException {
 
     public static final int CONNECTION_OUT = 3;
     public static final int NET_DISCONNECT = 4;
+    public static final int DATA_STYLE_ERROR = 5;
 
-    private String displayMessage;
-    private Throwable throwable;
+    private String reason;//真实异常原因
+    private String displayMessage;//显示给用户的异常原因
     private int code;
 
-    public ApiException(String reason) {
+    public ApiException(int code,String reason,String displayMessage){
         super(reason);
+        this.reason = reason;
+        this.code = code;
+        this.displayMessage = displayMessage;
     }
 
-    public ApiException(Throwable e, int code) {
-        this.code = code;
-        this.throwable = e;
+    public String getReason() {
+        return reason;
     }
 
-    public ApiException(int code,String message){
-        this.code = code;
-        this.displayMessage = message;
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public String getDisplayMessage() {
+        return displayMessage;
     }
 
     public void setDisplayMessage(String displayMessage) {
         this.displayMessage = displayMessage;
     }
 
-    public String getDisplayMessage(){
-        return displayMessage;
-    }
-
     public int getCode() {
         return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
     }
 }

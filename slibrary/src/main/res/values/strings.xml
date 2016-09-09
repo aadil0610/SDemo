@@ -6,4 +6,5 @@
     <string name="data_parse_error">数据解析错误</string>
     <string name="unknow_error">未知错误</string>
     <string name="net_conn_out">网络错误，连接超时</string>
+    <string name="net_disconnect">网络未连接</string>
 </resources>

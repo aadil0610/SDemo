@@ -46,6 +46,7 @@ public class FrescoActivity extends AppCompatActivity {
     private LoadMoreView loadMoreView;
     private SimpleDraweeView simpleDraweeView;
     private RelativeLayout rlSimple;
+    private PictureWrap pictureWrap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,6 +61,7 @@ public class FrescoActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        pictureWrap = new PictureWrap(this);
         pictures = new ArrayList<PictureBean>();
         getData();
         sRecycleView.setLayoutManager(new GridLayoutManager(this,2));
@@ -93,8 +95,7 @@ public class FrescoActivity extends AppCompatActivity {
 
     private void getData() {
         RetrofitManager.getInstance().changedUrlTemp(Const.PICTURE_URL);
-        new PictureWrap(this)
-                .obtainPictures(10)
+        pictureWrap.obtainPictures(10)
                 .subscribe(new ServiceSubscribe<List<PictureBean>>(this) {
 
                     @Override
